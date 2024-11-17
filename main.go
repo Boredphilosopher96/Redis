@@ -34,5 +34,6 @@ func handleConn(conn net.Conn) {
             return
         }
         fmt.Printf("Received: %s \n", buff)
+        conn.Write(buff)
     }
 }

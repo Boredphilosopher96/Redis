@@ -21,10 +21,17 @@ func main() {
         if err != nil {
             fmt.Println("error reading input ", err)
         }
-        _, err = conn.Write([]byte(line))
+        _, err := conn.Write([]byte(line))
         if err != nil {
             fmt.Println("Error writing to server ",err)
             return
         }
+        buff := make([]byte, 1024)
+        _, error := conn.Read(buff)
+        if error != nil {
+            fmt.Println("Error reading from server ", err)
+            os.Exit(1)
+        }
+        fmt.Println("Received ", string(buff))
     } 
 }
