@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"main/resp"
 	"net"
 )
 
@@ -29,11 +31,15 @@ func handleConn(conn net.Conn) {
     for {
         buff := make([]byte, 1024)
         _ , err := conn.Read(buff)
-        if err != nil {
+        if err == io.EOF {
+            fmt.Println("Client closed connection")
+            return
+        } else if err != nil {
             fmt.Println("Could not read message ", err)
             return
         }
         fmt.Printf("Received: %s \n", buff)
-        conn.Write(buff)
+        response := resp.Parse(buff)
+        conn.Write(response)
     }
 }
